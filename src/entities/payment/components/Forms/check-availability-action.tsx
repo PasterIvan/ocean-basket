@@ -22,16 +22,15 @@ import {
   PaymentArgumentsParams,
 } from "@shared/api/common";
 import {
+  $minSum,
   $promocode,
-  MIN_SUM_KZ,
-  MIN_SUM_RUS,
 } from "@entities/cart/components/cart-sidebar-view";
 import { toast } from "react-toastify";
 import { $restaurant } from "@widgets/header/components/AddressSelection";
 import {
+  $freeSum,
   $grandTotal,
   $location,
-  FREE_DELIVERY_RUS_SUM,
   MerchantLogin,
 } from "./PaymentProccessing";
 import { createEvent, createStore } from "effector";
@@ -224,6 +223,8 @@ export const CheckAvailabilityAction: React.FC<
   const location = useStore($location);
   const grandTotal = useStore($grandTotal);
   const isOpen = useStore($isRestaurantOpen);
+  const minSum = useStore($minSum);
+  const freeSum = useStore($freeSum);
 
   const isLoading = useStore($pending);
 
@@ -245,13 +246,8 @@ export const CheckAvailabilityAction: React.FC<
       return false;
     }
 
-    if ((totalAmount ?? 0) < (isRub ? MIN_SUM_RUS : MIN_SUM_KZ)) {
-      setError(
-        `Заказ должен быть на сумму от ${formatPrice(
-          isRub ? MIN_SUM_RUS : MIN_SUM_KZ,
-          isRub
-        )}`
-      );
+    if ((totalAmount ?? 0) < minSum) {
+      setError(`Заказ должен быть на сумму от ${formatPrice(minSum, isRub)}`);
       return false;
     }
 
@@ -260,11 +256,7 @@ export const CheckAvailabilityAction: React.FC<
       return false;
     }
 
-    if (
-      isRub &&
-      (totalAmount ?? 0) < FREE_DELIVERY_RUS_SUM &&
-      location === null
-    ) {
+    if (isRub && (totalAmount ?? 0) < freeSum && location === null) {
       setError("Необходимо выбрать зону доставки");
       return false;
     }
@@ -319,7 +311,7 @@ export const CheckAvailabilityAction: React.FC<
         promocode: promocode?.promocode!,
         dishes: formattedDishes,
         MerchantLogin: MerchantLogin,
-        location: (totalAmount ?? 0) >= FREE_DELIVERY_RUS_SUM ? null : location,
+        location: (totalAmount ?? 0) >= $freeSum.getState() ? null : location,
       },
       paymentArguments: {
         OutSum: (window as any).isMock ? 1 : grandTotal,

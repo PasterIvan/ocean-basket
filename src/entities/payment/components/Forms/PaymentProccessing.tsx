@@ -22,9 +22,31 @@ import { RightSideView } from "./unverified-item-list";
 import { getIsKz } from "@shared/lib/functional-utils";
 import { $rus } from "@features/choose-dishes/models";
 import { getRestaurantFx } from "@widgets/address-modal";
+import { $hostUrl } from "@shared/api/switchable";
+import { prefixes } from "@shared/api/base";
+import { combine } from "effector";
+import classNames from "classnames";
 
-export const FREE_DELIVERY_RUS_SUM = 5000;
-export const FREE_DELIVERY_KZ_SUM = 15000;
+export const freeSums = {
+  kz: {
+    [prefixes.kz[0]]: 15000,
+  },
+  ru: {
+    [prefixes.ru[0]]: 5000,
+    [prefixes.ru[1]]: 4000,
+  },
+};
+
+export const $freeSum = createStore(5000);
+
+sample({
+  source: combine([$rus, $hostUrl]),
+  clock: [$rus, $hostUrl],
+  fn: ([rus, hostUrl]) => {
+    return freeSums[rus ? "ru" : "kz"]?.[hostUrl] || 5000;
+  },
+  target: $freeSum,
+});
 
 export const makeTelegrammDescription = (
   size?: number,
@@ -51,16 +73,50 @@ export const makeTelegrammDescription = (
   // );
 };
 
-export const MerchantLogin = !getIsKz() ? "Ocean_Basket" : "OceanBasketKZ";
+export let MerchantLogin = !getIsKz() ? "Ocean_Basket" : "OceanBasketKZ";
+
+const merchantLogins = {
+  [prefixes.kz[0]]: "OceanBasketKZ",
+  [prefixes.ru[0]]: "Ocean_Basket",
+  [prefixes.ru[1]]: "OceanBasket",
+};
+
+export const $merchantLogin = createStore(MerchantLogin);
+
+$rus.watch((isRus) => {
+  MerchantLogin = isRus ? "Ocean_Basket" : "OceanBasketKZ";
+});
 
 export enum AddressType {
   Billing = "billing",
   Shipping = "shipping",
 }
 
-export const LOCATION_FALSE_RUS_SUM = 500;
-export const LOCATION_TRUE_RUS_SUM = 250;
-export const LOCATION_KZ_SUM = 2000;
+export const LOCATION_KZ_SUM = { value: 2000 };
+
+export const $addSums = createStore<{ falseSum: number; trueSum: number }>({
+  falseSum: 500,
+  trueSum: 250,
+});
+
+export const addSums = {
+  [prefixes.ru[0]]: {
+    falseSum: 500,
+    trueSum: 250,
+  },
+  [prefixes.ru[1]]: {
+    falseSum: 0,
+    trueSum: 350,
+  },
+  [prefixes.kz[0]]: {
+    falseSum: 2000,
+    trueSum: 1000,
+  },
+};
+
+$addSums.on($hostUrl, (_, payload) => {
+  return addSums[payload];
+});
 
 const onLocation = createEvent<boolean>();
 export const $location = createStore<boolean | null>(
@@ -71,9 +127,9 @@ $location.watch((value) => setToStorage("location", value));
 
 export const getDeliveryFee = (locationInitial: boolean | null): number => {
   return locationInitial === true
-    ? LOCATION_TRUE_RUS_SUM
+    ? $addSums.getState().trueSum
     : locationInitial === false
-    ? LOCATION_FALSE_RUS_SUM
+    ? $addSums.getState().falseSum
     : 0;
 };
 export const getDeliveryFeeName = (
@@ -81,15 +137,14 @@ export const getDeliveryFeeName = (
   isRub: boolean,
   location?: boolean | null
 ): string => {
-  return (totalAmount ?? 0) >=
-    (isRub ? FREE_DELIVERY_RUS_SUM : FREE_DELIVERY_KZ_SUM)
+  return (totalAmount ?? 0) >= $freeSum.getState()
     ? "Бесплатно"
     : !isRub
-    ? formatPrice(LOCATION_KZ_SUM, isRub)
+    ? formatPrice(LOCATION_KZ_SUM.value, isRub)
     : location === true
-    ? formatPrice(LOCATION_TRUE_RUS_SUM, isRub)
+    ? formatPrice($addSums.getState().trueSum, isRub)
     : location === false
-    ? formatPrice(LOCATION_FALSE_RUS_SUM, isRub)
+    ? formatPrice($addSums.getState().falseSum, isRub)
     : "";
 };
 
@@ -101,27 +156,46 @@ export const $grandTotal = createStore<number>(
 );
 
 sample({
-  source: [$cartSizes, $location, $rus],
-  clock: [$cartSizes, $location, $rus],
-  fn: ([cartSizes, location, isRus]) => {
+  source: combine([$cartSizes, $location, $rus, $freeSum]),
+  clock: [$cartSizes, $location, $rus, $freeSum],
+  fn: ([cartSizes, location, isRus, freeSum]) => {
     const totalAmount = cartSizes?.totalAmount ?? 0;
 
-    if (totalAmount >= (isRus ? FREE_DELIVERY_RUS_SUM : FREE_DELIVERY_KZ_SUM)) {
+    if (totalAmount >= (freeSum || 0)) {
       return totalAmount;
     }
 
     const locationFee = !isRus
-      ? LOCATION_KZ_SUM
+      ? LOCATION_KZ_SUM.value
       : location === true
-      ? LOCATION_TRUE_RUS_SUM
+      ? $addSums.getState().trueSum
       : location === false
-      ? LOCATION_FALSE_RUS_SUM
+      ? $addSums.getState().falseSum
       : 0;
 
     return totalAmount + locationFee;
   },
   target: $grandTotal,
 });
+
+const textes = {
+  [prefixes.ru[0]]: [
+    `Указанный адрес входит в зону доставки ВНУТРИ ТТК + ${formatPrice(
+      addSums[prefixes.ru[0]].trueSum,
+      true
+    )}.`,
+    `Указанный адрес входит в зону доставки от МКАД до ТТК + ${formatPrice(
+      addSums[prefixes.ru[0]].falseSum,
+      true
+    )}.`,
+  ],
+  [prefixes.ru[1]]: [
+    `Заказ ниже ${freeSums.ru[prefixes.ru[1]]} р., доставка будет стоить ${
+      addSums[prefixes.ru[1]].trueSum
+    } р.`,
+    `“Я живу в ЖК Шуваловский” — бесплатная доставка`,
+  ],
+};
 
 export function PaymentProccessing() {
   const cartSizes = useStore($cartSizes);
@@ -134,10 +208,14 @@ export function PaymentProccessing() {
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
   const [orderDate, setOrderDate] = useState<Dayjs | null>(null);
 
+  const hostUrl = useStore($hostUrl);
+  const freeSum = useStore($freeSum);
   const form = useStore($form);
   const phone = useStore($phone);
   const location = useStore($location);
   const { totalAmount } = useStore($cartSizes);
+
+  const isRightMode = Boolean(hostUrl === prefixes.ru[1]);
 
   const onSubmitHandler = useCallback(
     (
@@ -185,6 +263,8 @@ export function PaymentProccessing() {
     []
   );
 
+  console.log("pizdec", hostUrl, textes);
+
   return !isOrdered ? (
     <>
       <div className="py-8 sm:px-4 lg:py-10 lg:px-8 xl:py-14 xl:px-16 2xl:px-20 bg-gray-100">
@@ -208,8 +288,6 @@ export function PaymentProccessing() {
               onEdit={() => setIsAddressModalOpen(true)}
               isLoading={isLoading}
               onSubmit={(coords) => {
-                setIsAddressModalOpen(false);
-
                 if (isLoading) return;
                 if (
                   typeof coords[0] !== "number" ||
@@ -219,6 +297,8 @@ export function PaymentProccessing() {
                   return;
                 }
 
+                setIsAddressModalOpen(false);
+
                 getRestaurantFx({
                   latitude: coords[0]!.toString(),
                   longtitude: coords[1]!.toString(),
@@ -227,40 +307,56 @@ export function PaymentProccessing() {
               emptyMessage="Адрес не заполнен"
               after={
                 !isRub ? undefined : (totalAmount ?? 0) >=
-                  FREE_DELIVERY_RUS_SUM ? undefined : (
+                  freeSum ? undefined : (
                   <div className="flex gap-3 flex-wrap">
                     <div className="w-[16rem] text-xs flex justify-between">
-                      <Radio
-                        checked={location === true}
-                        onClick={() => onLocation(true)}
-                        className="pt-2"
-                        isBig
-                        name={"inside TTK"}
-                        id={"inside TTK"}
-                      />
+                      {!isRightMode && (
+                        <Radio
+                          checked={location === true}
+                          onClick={() => onLocation(true)}
+                          className="pt-2"
+                          isBig
+                          name={"inside TTK"}
+                          id={"inside TTK"}
+                        />
+                      )}
                       <div
-                        className="cursor-pointer"
+                        className={classNames(
+                          isRightMode && "text-center",
+                          "cursor-pointer select-none"
+                        )}
                         onClick={() => onLocation(true)}
                       >
-                        Указанный адрес входит в зону доставки ВНУТРИ ТТК +{" "}
-                        {formatPrice(LOCATION_TRUE_RUS_SUM, isRub)}.
+                        {textes[hostUrl]?.[0]}
                       </div>
                     </div>
                     <div className="w-[16rem] text-xs flex justify-between">
                       <Radio
                         checked={location === false}
-                        onClick={() => onLocation(false)}
+                        onClick={() => {
+                          if (isRightMode) {
+                            onLocation(!location);
+                            return;
+                          }
+                          onLocation(false);
+                        }}
                         className="pt-2"
                         isBig
                         name={"outside TTK"}
                         id={"outside TTK"}
                       />
                       <div
-                        className="cursor-pointer"
-                        onClick={() => onLocation(false)}
+                        className="cursor-pointer select-none"
+                        onClick={() => {
+                          if (isRightMode) {
+                            onLocation(!location);
+                            return;
+                          }
+
+                          onLocation(false);
+                        }}
                       >
-                        Указанный адрес входит в зону доставки от МКАД до ТТК +{" "}
-                        {formatPrice(LOCATION_FALSE_RUS_SUM, isRub)}.
+                        {textes[hostUrl]?.[1]}
                       </div>
                     </div>
                   </div>

@@ -23,7 +23,9 @@ export function Card({
         {text}
       </span>
       {label && <div className="pt-3 text-2xl text-body">{label}</div>}
-      {description && <div className="pt-3 text-body">{description}</div>}
+      {description && (
+        <div className="mt-auto pt-3 text-body">{description}</div>
+      )}
     </div>
   );
 }

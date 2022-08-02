@@ -1,13 +1,9 @@
+import { minSums } from "@entities/cart/components/cart-sidebar-view";
 import {
-  MIN_SUM_KZ,
-  MIN_SUM_RUS,
-} from "@entities/cart/components/cart-sidebar-view";
-import {
-  FREE_DELIVERY_KZ_SUM,
   LOCATION_KZ_SUM,
-  FREE_DELIVERY_RUS_SUM,
-  LOCATION_TRUE_RUS_SUM,
-  LOCATION_FALSE_RUS_SUM,
+  $addSums,
+  freeSums,
+  addSums,
 } from "@entities/payment/components/Forms/PaymentProccessing";
 import { prefixes } from "@shared/api/base";
 
@@ -17,9 +13,9 @@ export const deliveryCostConfig = {
       <ul>
         <li>
           Доставка по городу в пределах зоны при заказе от{" "}
-          {FREE_DELIVERY_KZ_SUM} тенге — бесплатная.
+          {freeSums.kz[prefixes.kz[0]]} тенге — бесплатная.
         </li>
-        <li>В пределах зоны доставки — {LOCATION_KZ_SUM} тенге.</li>
+        <li>В пределах зоны доставки — {LOCATION_KZ_SUM.value} тенге.</li>
       </ul>
     ),
   },
@@ -28,30 +24,28 @@ export const deliveryCostConfig = {
       <ul>
         <li>
           Доставка по городу в пределах МКАД при заказе от{" "}
-          {FREE_DELIVERY_RUS_SUM} р. — бесплатная.
+          {freeSums.ru[prefixes.ru[1]]} р. — бесплатная.
         </li>
         <li>
           {" "}
-          В пределах Третьего транспортного кольца — {
-            LOCATION_TRUE_RUS_SUM
-          } р.{" "}
+          В пределах Третьего транспортного кольца —{" "}
+          {addSums[prefixes.ru[1]].trueSum} р.{" "}
         </li>
-        <li> В пределах МКАД — {LOCATION_FALSE_RUS_SUM} р.</li>
+        <li> В пределах ЖК Шуваловский — бесплатная.</li>
       </ul>
     ),
     default: (
       <ul>
         <li>
           Доставка по городу в пределах МКАД при заказе от{" "}
-          {FREE_DELIVERY_RUS_SUM} р. — бесплатная.
+          {freeSums.ru[prefixes.ru[0]]} р. — бесплатная.
         </li>
         <li>
           {" "}
-          В пределах Третьего транспортного кольца — {
-            LOCATION_TRUE_RUS_SUM
-          } р.{" "}
+          В пределах Третьего транспортного кольца —{" "}
+          {addSums[prefixes.ru[0]].trueSum} р.{" "}
         </li>
-        <li> В пределах МКАД — {LOCATION_FALSE_RUS_SUM} р.</li>
+        <li> В пределах МКАД — {addSums[prefixes.ru[0]].falseSum} р.</li>
       </ul>
     ),
   },
@@ -84,20 +78,21 @@ export const deliveryAreaConfig = {
 
 export const minOrderPriceConfig = {
   kz: {
-    default: `${MIN_SUM_KZ} тенге*`,
+    default: `${minSums.kz[prefixes.kz[0]]} тенге*`,
   },
   ru: {
-    default: `${MIN_SUM_RUS} РУБ*`,
-    [prefixes.ru[1]]: `${MIN_SUM_RUS} РУБ*`,
+    default: `${minSums.ru[prefixes.ru[0]]} РУБ*`,
+    [prefixes.ru[1]]: `${minSums.ru[prefixes.ru[0]]} РУБ*`,
   },
 };
 
 export const freeDeliveryConfig = {
   kz: {
-    default: `При заказе выше ${FREE_DELIVERY_KZ_SUM} тенге.`,
+    default: `При заказе выше ${freeSums.kz[prefixes.kz[0]]} тенге.`,
   },
   ru: {
-    default: `При заказе выше ${FREE_DELIVERY_RUS_SUM} руб.`,
+    [prefixes.ru[1]]: `При заказе выше ${freeSums.ru[prefixes.ru[1]]} р.`,
+    default: `При заказе выше ${freeSums.ru[prefixes.ru[0]]} руб.`,
   },
 };
 

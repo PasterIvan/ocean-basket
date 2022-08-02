@@ -15,16 +15,42 @@ import {
 import { getPlurals } from "@shared/lib/functional-utils";
 import { useState } from "react";
 import Input from "@entities/payment/components/Forms/forms/input";
-import { createEffect, createEvent, createStore } from "effector";
+import {
+  combine,
+  createEffect,
+  createEvent,
+  createStore,
+  sample,
+} from "effector";
 import { verifyPromocode } from "@shared/api/common";
 import Button from "@shared/button";
 import { toast } from "react-toastify";
 import { formatPrice } from "./Details/variation-groups";
 import { $rus } from "@features/choose-dishes/models";
 import { $isConfirmed, setAdressModalOpen } from "@widgets/address-modal";
+import { prefixes } from "@shared/api/base";
+import { $hostUrl } from "@shared/api/switchable";
 
-export const MIN_SUM_RUS = 2000;
-export const MIN_SUM_KZ = 2000;
+export const minSums = {
+  kz: {
+    [prefixes.kz[0]]: 2000,
+  },
+  ru: {
+    [prefixes.ru[0]]: 2000,
+    [prefixes.ru[1]]: 2000,
+  },
+};
+
+export const $minSum = createStore(2000);
+
+sample({
+  source: combine([$rus, $hostUrl]),
+  clock: [$rus, $hostUrl],
+  fn: ([rus, hostUrl]) => {
+    return minSums[rus ? "ru" : "kz"]?.[hostUrl] || 2000;
+  },
+  target: $minSum,
+});
 
 export const EmptyCartPanel = ({
   noGutters = false,
@@ -99,6 +125,7 @@ export const CartSidebarView = ({
   const isRub = useStore($rus);
   const cartSizes = useStore($cartSizes);
   const cart = useStore($cart);
+  const minSum = useStore($minSum);
 
   const [isPromocodeInput, setIsPromocodeInput] = useState(false);
   const [promocode, setPromocode] = useState<string>("");
@@ -108,8 +135,7 @@ export const CartSidebarView = ({
   const isLoading = useStore(verifyPromocodeFx.pending);
   const isOpen = useStore($isRestaurantOpen);
 
-  const isLessMinSum =
-    (cartSizes.totalAmount ?? 0) < (isRub ? MIN_SUM_RUS : MIN_SUM_KZ);
+  const isLessMinSum = (cartSizes.totalAmount ?? 0) < minSum;
   const isDisabled = !cartSizes.size || isLessMinSum || isOpen === false;
 
   useGate(gateCartSidebarView, {
@@ -275,8 +301,7 @@ export const CartSidebarView = ({
         ) : (
           isLessMinSum && (
             <p className="pt-[6px] text-sm text-center justify-self-end text-body">
-              Заказ должен быть на сумму от{" "}
-              {formatPrice(isRub ? MIN_SUM_RUS : MIN_SUM_KZ, isRub)}
+              Заказ должен быть на сумму от {formatPrice(minSum, isRub)}
             </p>
           )
         )}

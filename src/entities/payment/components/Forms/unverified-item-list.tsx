@@ -9,11 +9,13 @@ import { useStore } from "effector-react";
 import { $cartSizes, $cart } from "@features/choose-dishes/models";
 import { DishStatus } from "@shared/api/common";
 import {
+  $freeSum,
   $grandTotal,
   $location,
   getDeliveryFeeName,
 } from "./PaymentProccessing";
 import { $rus } from "@features/choose-dishes/models";
+import { $hostUrl } from "@shared/api/switchable";
 
 export const RightSideView = () => {
   const isRub = useStore($rus);
@@ -23,6 +25,9 @@ export const RightSideView = () => {
 
   const location = useStore($location);
   const grandTotal = useStore($grandTotal);
+
+  const hostUrl = useStore($hostUrl);
+  const freeSum = useStore($freeSum);
 
   // const { price: discount } = usePrice({
   //   amount: 0,

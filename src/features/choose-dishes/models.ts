@@ -66,7 +66,16 @@ export const fetchTimeValidateFx = createEffect(async () => {
 export const fetchPopularDishesFx = createEffect(getPopular);
 export const fetchPomotionsFx = createEffect(getPromotions);
 
-export const $isRestaurantOpen = restore(fetchTimeValidateFx.doneData, null);
+const setIsOpen = createEvent<boolean>();
+export const $isRestaurantOpen = restore(fetchTimeValidateFx.doneData, null).on(
+  setIsOpen,
+  (_, data) => data
+);
+
+//@ts-ignore
+window.setOpen = () => {
+  setIsOpen(true);
+};
 
 forward({
   from: gateChooseDishes.open,
