@@ -73,19 +73,22 @@ export const makeTelegrammDescription = (
   // );
 };
 
-export let MerchantLogin = !getIsKz() ? "Ocean_Basket" : "OceanBasketKZ";
-
 const merchantLogins = {
-  [prefixes.kz[0]]: "OceanBasketKZ",
-  [prefixes.ru[0]]: "Ocean_Basket",
-  [prefixes.ru[1]]: "OceanBasket",
+  kz: {
+    [prefixes.kz[0]]: "OceanBasketKZ",
+  },
+  ru: {
+    [prefixes.ru[0]]: "Ocean_Basket",
+    [prefixes.ru[1]]: "OceanBasketShu",
+  },
 };
 
-export const $merchantLogin = createStore(MerchantLogin);
-
-$rus.watch((isRus) => {
-  MerchantLogin = isRus ? "Ocean_Basket" : "OceanBasketKZ";
-});
+export const $merchantLogin = createStore("Ocean_Basket").on(
+  combine([$rus, $hostUrl]),
+  (_, [rus, hostUrl]) => {
+    return merchantLogins[rus ? "ru" : "kz"]?.[hostUrl] || "Ocean_Basket";
+  }
+);
 
 export enum AddressType {
   Billing = "billing",
@@ -214,6 +217,7 @@ export function PaymentProccessing() {
   const phone = useStore($phone);
   const location = useStore($location);
   const { totalAmount } = useStore($cartSizes);
+  const merchantLogin = useStore($merchantLogin);
 
   const isRightMode = Boolean(hostUrl === prefixes.ru[1]);
 
@@ -230,7 +234,7 @@ export function PaymentProccessing() {
       newTab?: Window | null
     ) => {
       const url = getPaymentLink(
-        MerchantLogin,
+        merchantLogin,
         `${OutSum}`,
         `${InvoiceId}`,
         SignatureValue,
@@ -260,7 +264,7 @@ export function PaymentProccessing() {
       onScrollPage();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [merchantLogin]
   );
 
   console.log("pizdec", hostUrl, textes);

@@ -27,12 +27,7 @@ import {
 } from "@entities/cart/components/cart-sidebar-view";
 import { toast } from "react-toastify";
 import { $restaurant } from "@widgets/header/components/AddressSelection";
-import {
-  $freeSum,
-  $grandTotal,
-  $location,
-  MerchantLogin,
-} from "./PaymentProccessing";
+import { $freeSum, $grandTotal, $location, $merchantLogin } from "./PaymentProccessing";
 import { createEvent, createStore } from "effector";
 import { formatPrice } from "@entities/cart/components/Details/variation-groups";
 import { useNavigate } from "react-router-dom";
@@ -227,6 +222,7 @@ export const CheckAvailabilityAction: React.FC<
   const freeSum = useStore($freeSum);
 
   const isLoading = useStore($pending);
+  const merchantLogin = useStore($merchantLogin);
 
   const [errorMessage, setError] = useState<string>();
   const [isShownError, setIsShownError] = useState<boolean>();
@@ -310,7 +306,7 @@ export const CheckAvailabilityAction: React.FC<
         phone: `+${phone!}`,
         promocode: promocode?.promocode!,
         dishes: formattedDishes,
-        MerchantLogin: MerchantLogin,
+        MerchantLogin: merchantLogin,
         location: (totalAmount ?? 0) >= $freeSum.getState() ? null : location,
       },
       paymentArguments: {

@@ -8,8 +8,8 @@ import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
+  $merchantLogin,
   makeTelegrammDescription,
-  MerchantLogin,
 } from "../Forms/PaymentProccessing";
 import { OrderDescription } from "./OrderDescription";
 
@@ -64,6 +64,7 @@ export function OrderDescriptionContainerFetch({
   const isError = useStore($fetchFail);
 
   const data = useStore(paymentStatusData);
+  const merchantLogin = useStore($merchantLogin);
 
   const navigate = useNavigate();
 
@@ -132,7 +133,7 @@ export function OrderDescriptionContainerFetch({
 
             window.location.replace(
               getPaymentLink(
-                MerchantLogin,
+                merchantLogin,
                 `${
                   parseInt(data?.outSum as string) ||
                   parseInt(outSum as string) ||
