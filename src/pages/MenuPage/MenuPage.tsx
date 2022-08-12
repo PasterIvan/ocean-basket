@@ -2,7 +2,7 @@ import { AddDishModal } from "@entities/cart/components/Details/add-dish-modal";
 import { PromotionSlider } from "@entities/promotions/components/PromotionSlider/PromotionSlider";
 import { onRemoveAnimationConfig } from "@shared/components/LoadingContainer/FishAnimationContainer";
 import { RoutesConfig } from "@shared/lib/routes-config";
-import { AddressModal } from "@widgets/address-modal";
+import { setAdressModalOpen } from "@widgets/address-modal";
 import FilterBar from "@widgets/filter-bar/filter-bar";
 import { ShopClosedModal } from "@widgets/ShopClosedModal";
 import classNames from "classnames";
@@ -20,6 +20,14 @@ export function MenuPage() {
     // } catch {
     //   return false;
     // }
+  }, []);
+
+  useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+
+    if (search.has("gps")) {
+      setAdressModalOpen(true);
+    }
   }, []);
 
   return (

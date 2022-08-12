@@ -17,12 +17,15 @@ import classNames from "classnames";
 
 import styles from "./styles.module.scss";
 import { onScrollPage } from "@shared/components/ScrollContainer";
+import { $isLoadingAnimation } from "@shared/components/LoadingContainer/FishAnimationContainer";
 
 export function Header() {
   const isOpen = useStore($isCartSidebarOpen);
   const { size } = useStore($cartSizes);
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  const isLoading = useStore($isLoadingAnimation);
 
   const onLogoClickHandler = useCallback(() => {
     navigate(RoutesConfig.Dashboard);
@@ -31,7 +34,10 @@ export function Header() {
 
   return (
     <header
-      className={"flex-shrink-0 site-header-with-search h-14 md:h-16 lg:h-22"}
+      className={classNames(
+        "flex-shrink-0 site-header-with-search h-14 md:h-16 lg:h-22",
+        isLoading && "z-[1000]"
+      )}
     >
       <div className="flex justify-between items-center w-full h-14 md:h-16 lg:h-22 px-2 xl:px-32 py-5 z-50 fixed bg-light border-b border-border-200 shadow-sm transition-transform duration-300">
         <div className="flex items-center flex-grow lg:flex-grow-0 h-full">

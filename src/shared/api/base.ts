@@ -1,4 +1,3 @@
-import { getIsKz } from "@shared/lib/functional-utils";
 import axios, { AxiosResponseTransformer } from "axios";
 
 export const prefixes = {
@@ -11,7 +10,20 @@ export const prefixes = {
   },
 };
 
-export const hostUrl = !getIsKz() ? prefixes.ru[0] : prefixes.kz[0];
+export const hostUrls = {
+  "https://oceanbasket.kz/": prefixes.kz[0],
+  "https://oceanbasket.ru/": prefixes.ru[0],
+  "https://oceanbasket-shuv.ru/": prefixes.ru[1],
+};
+
+export const prefixToUrl = {
+  [prefixes.kz[0]]: "https://oceanbasket.kz/",
+  [prefixes.ru[0]]: "https://oceanbasket.ru/",
+  [prefixes.ru[1]]: "https://oceanbasket-shuv.ru/",
+};
+
+export const hostUrl =
+  (hostUrls as any)[window.location.href] || prefixes.ru[0];
 
 export const transformResponse: AxiosResponseTransformer[] = [
   (data) => {

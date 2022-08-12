@@ -1,4 +1,10 @@
-export type StorageFields = "cart" | "form" | "phone" | "schedule" | "location";
+export type StorageFields =
+  | "cart"
+  | "form"
+  | "phone"
+  | "schedule"
+  | "location"
+  | "coords";
 
 export const getFromStorage = <T>(field: StorageFields, isObject = true): T => {
   const localCart = window.localStorage.getItem(field);

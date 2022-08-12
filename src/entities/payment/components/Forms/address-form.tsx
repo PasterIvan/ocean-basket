@@ -28,6 +28,31 @@ export type FormValues = {
   persons_number: number;
 };
 
+export const formKeys: (keyof FormValues)[] = [
+  "title",
+  "city",
+  "street",
+  "building",
+  "district",
+  "part",
+  "flat",
+  "entrance",
+  "floor",
+  "intercom",
+  "comment",
+  "persons_number",
+];
+
+export const inputOnlyFormKeys: (keyof FormValues)[] = [
+  "flat",
+  "entrance",
+  "floor",
+  "intercom",
+  "comment",
+  "persons_number",
+  "title",
+];
+
 const transformNumber = (value: unknown) => {
   const newValue = parseInt(value as string);
   return isNaN(newValue) ? null : newValue;
@@ -69,6 +94,18 @@ const addressSchema = yup.object().shape({
     .min(1, "Количество персон не может быть пустым"),
 });
 
+export const onCoordsChange = createEvent<[number | null, number | null]>();
+const onResetCoords = createEvent<void>();
+
+const coords = getFromStorage<[number | null, number | null]>(
+  "coords",
+  false
+) || [null, null];
+
+export const $coords = createStore<[number | null, number | null]>(coords)
+  .on(onCoordsChange, (_, coords) => coords)
+  .reset(onResetCoords);
+
 export const onSubmitForm = createEvent<FormValues>();
 export const onResetForm = createEvent<void>();
 
@@ -91,11 +128,20 @@ const $isMapMode = createStore(true)
   .on(onToggleMode, (state) => !state);
 
 const AddressForm: React.FC<{
+  initialCoords?: [number | null, number | null];
   isLoading?: boolean;
   onSubmit: (coords: Array<number | null>, country?: string) => void;
+  onAdressChange?: (coords: (number | null)[], form: FormValues) => void;
   switchIconEnabled?: boolean;
   subLabel?: string;
-}> = ({ onSubmit, switchIconEnabled = true, isLoading = false, subLabel }) => {
+}> = ({
+  initialCoords,
+  onSubmit,
+  switchIconEnabled = true,
+  onAdressChange,
+  isLoading = false,
+  subLabel,
+}) => {
   const isMapMode = useStore($isMapMode);
   const [isSwitchShown, setIsSwitchShown] = useState(true);
   const [coords, setCoords] = useState<Array<number | null>>([null, null]);
@@ -105,6 +151,7 @@ const AddressForm: React.FC<{
 
   const onSubmitHandler: SubmitHandler<FormValues> = (props) => {
     onSubmitForm(props);
+    onCoordsChange(coords as [number | null, number | null]);
     onSubmit(coords, country);
   };
 
@@ -122,7 +169,7 @@ const AddressForm: React.FC<{
           />
         )}
         <h1 className="text-body font-semibold text-lg text-center">
-          {form
+          {initialCoords || form
             ? "Подтвердите адрес доставки"
             : "Введите адрес, для определения ближайшего ресторана"}
         </h1>
@@ -138,13 +185,20 @@ const AddressForm: React.FC<{
           },
         }}
       >
-        {({ register, setValue, formState: { errors }, clearErrors }) => (
+        {({
+          register,
+          setValue,
+          formState: { errors },
+          clearErrors,
+          getValues,
+        }) => (
           <>
             <AddressSuggestionsMap
+              initialCoords={initialCoords}
               onCoordsChange={setCoords}
-              formInitial={form ?? undefined}
+              formInitial={!initialCoords ? form ?? undefined : undefined}
               className={classNames("col-span-4", !isMapMode && "hidden")}
-              onChange={(data) => {
+              onChange={(data, coords) => {
                 setCountry(data.country);
                 setValue(
                   "entrance",
@@ -156,6 +210,9 @@ const AddressForm: React.FC<{
                 setValue("district", data.district ?? "");
 
                 clearErrors();
+
+                //@ts-ignore
+                onAdressChange?.(coords, getValues());
               }}
               onError={(e) => {
                 console.error(e);

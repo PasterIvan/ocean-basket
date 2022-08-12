@@ -4,13 +4,22 @@ import { $isLoadingAnimation } from "@shared/components/LoadingContainer/FishAni
 import { useStore } from "effector-react";
 import { Fragment, useRef } from "react";
 
-export default function Modal({ open, onClose, children, showClose }: any) {
+export default function Modal({
+  open,
+  onClose,
+  children,
+  showClose,
+  ignoreAniation = false,
+}: any) {
   const isLoadingAnnimation = useStore($isLoadingAnimation);
 
   const cancelButtonRef = useRef(null);
 
   return (
-    <Transition show={!isLoadingAnnimation && open} as={Fragment}>
+    <Transition
+      show={ignoreAniation ? open : !isLoadingAnnimation && open}
+      as={Fragment}
+    >
       <Dialog
         as="div"
         className="fixed inset-0 z-50 overflow-y-auto"

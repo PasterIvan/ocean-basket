@@ -37,6 +37,7 @@ const getAddressString = (form: FormValues) => {
 };
 
 export const AddressSuggestionsMap = ({
+  initialCoords,
   formInitial,
   onChange,
   onError,
@@ -44,8 +45,9 @@ export const AddressSuggestionsMap = ({
   errors,
   onCoordsChange,
 }: {
+  initialCoords?: [number | null, number | null];
   formInitial?: FormValues;
-  onChange: (data: { [K in Keys]?: string }) => void;
+  onChange: (data: { [K in Keys]?: string }, coords: (number | null)[]) => void;
   onError?: (e: any) => void;
   className?: string;
   errors?: string[];
@@ -76,12 +78,15 @@ export const AddressSuggestionsMap = ({
             ?.GeocoderMetaData?.Address?.Components ?? [];
 
         setInput(data.geoObjects.get(0).properties.get("text"));
-        onChange({
-          ...components.reduce(
-            (obj, { kind, name }) => ({ ...obj, [kind]: name }),
-            {}
-          ),
-        });
+        onChange(
+          {
+            ...components.reduce(
+              (obj, { kind, name }) => ({ ...obj, [kind]: name }),
+              {}
+            ),
+          },
+          coords
+        );
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,6 +121,18 @@ export const AddressSuggestionsMap = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!ymapsInstance) return;
+    if (!isReady) return;
+
+    if (initialCoords) {
+      onCoordsChange?.(initialCoords);
+      setCoords(initialCoords);
+      decodePositionRef.current(initialCoords);
+      setViewCoords(initialCoords);
+    }
+  }, [isReady, ymapsInstance, initialCoords]);
 
   const searchCoords = useCallback(
     (address: string) => {
@@ -184,7 +201,8 @@ export const AddressSuggestionsMap = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady, ymapsInstance]);
 
-  const defaultCoords = isRus ? MOSCOW_COORDS : KAZAHSTAN_COORDS;
+  const defaultCoords =
+    initialCoords || (isRus ? MOSCOW_COORDS : KAZAHSTAN_COORDS);
 
   const noCoords = viewCoords.some((c) => c === null);
   const _viewCoords = (noCoords ? defaultCoords : viewCoords) as number[];
