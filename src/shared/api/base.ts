@@ -6,7 +6,7 @@ export const prefixes = {
   },
   ru: {
     0: "https://oceanbasket.ru/oceanBasket/public",
-    1: "https://oceanbasket-shuv.ru/",
+    1: "https://oceanbasket-shuv.ru/public",
   },
 };
 
