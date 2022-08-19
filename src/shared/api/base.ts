@@ -8,18 +8,17 @@ export const prefixes = {
     0: "https://oceanbasket.ru/oceanBasket/public",
     1: "https://oceanbasket-shuv.ru/oceanBasket/public",
   },
-};
+} as const;
 
 export const hostUrls = {
   "https://oceanbasket.kz": prefixes.kz[0],
   "https://oceanbasket.ru": prefixes.ru[0],
   "https://oceanbasket-shuv.ru": prefixes.ru[1],
-};
+} as const;
 
-export const prefixToUrl = Object.entries(prefixes).map(([key, value]) => [
-  value,
-  key,
-]);
+export const prefixToUrl = Object.fromEntries(
+  Object.entries(prefixes).map(([key, value]) => [value, key])
+) as { [K in keyof typeof hostUrls as typeof hostUrls[K]]: K };
 export const hostUrl =
   (hostUrls as any)[window.location.origin] || prefixes.ru[0];
 
