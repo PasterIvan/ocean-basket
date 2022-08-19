@@ -43,7 +43,7 @@ sample({
   source: combine([$rus, $hostUrl]),
   clock: [$rus, $hostUrl],
   fn: ([rus, hostUrl]) => {
-    return freeSums[rus ? "ru" : "kz"]?.[hostUrl] || 5000;
+    return (freeSums as any)[rus ? "ru" : "kz"]?.[hostUrl] || 5000;
   },
   target: $freeSum,
 });
@@ -86,7 +86,9 @@ const merchantLogins = {
 export const $merchantLogin = createStore("Ocean_Basket").on(
   combine([$rus, $hostUrl]),
   (_, [rus, hostUrl]) => {
-    return merchantLogins[rus ? "ru" : "kz"]?.[hostUrl] || "Ocean_Basket";
+    return (
+      (merchantLogins as any)[rus ? "ru" : "kz"]?.[hostUrl] || "Ocean_Basket"
+    );
   }
 );
 
@@ -118,7 +120,7 @@ export const addSums = {
 };
 
 $addSums.on($hostUrl, (_, payload) => {
-  return addSums[payload];
+  return (addSums as any)[payload];
 });
 
 const onLocation = createEvent<boolean>();
@@ -331,7 +333,7 @@ export function PaymentProccessing() {
                         )}
                         onClick={() => onLocation(true)}
                       >
-                        {textes[hostUrl]?.[0]}
+                        {(textes as any)[hostUrl]?.[0]}
                       </div>
                     </div>
                     <div className="w-[16rem] text-xs flex justify-between">
@@ -360,7 +362,7 @@ export function PaymentProccessing() {
                           onLocation(false);
                         }}
                       >
-                        {textes[hostUrl]?.[1]}
+                        {(textes as any)[hostUrl]?.[1]}
                       </div>
                     </div>
                   </div>

@@ -45,11 +45,11 @@ sample({
 
     if (
       data?.prefix &&
-      prefixToUrl[data?.prefix] &&
-      window.location.origin !== prefixToUrl[data?.prefix] &&
-      !prefixToUrl[data?.prefix].startsWith(window.location.origin)
+      (prefixToUrl as any)[data?.prefix] &&
+      window.location.origin !== (prefixToUrl as any)[data?.prefix] &&
+      !(prefixToUrl as any)[data?.prefix].startsWith(window.location.origin)
     ) {
-      const href = new URL(prefixToUrl[data?.prefix]);
+      const href = new URL((prefixToUrl as any)[data?.prefix]);
       href.pathname = RoutesConfig.Menu;
       href.searchParams.set("gps", JSON.stringify(coords));
 

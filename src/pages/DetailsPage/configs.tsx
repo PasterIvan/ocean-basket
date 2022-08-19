@@ -13,7 +13,7 @@ export const deliveryCostConfig = {
       <ul>
         <li>
           Доставка по городу в пределах зоны при заказе от{" "}
-          {freeSums.kz[prefixes.kz[0]]} тенге — бесплатная.
+          {(freeSums as any).kz[prefixes.kz[0]]} тенге — бесплатная.
         </li>
         <li>В пределах зоны доставки — {LOCATION_KZ_SUM.value} тенге.</li>
       </ul>
@@ -24,7 +24,7 @@ export const deliveryCostConfig = {
       <ul>
         <li>
           Доставка по городу в пределах МКАД при заказе от{" "}
-          {freeSums.ru[prefixes.ru[1]]} р. — бесплатная.
+          {(freeSums as any).ru[prefixes.ru[1]]} р. — бесплатная.
         </li>
         <li>
           {" "}
