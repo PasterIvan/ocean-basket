@@ -11,19 +11,17 @@ export const prefixes = {
 };
 
 export const hostUrls = {
-  "https://oceanbasket.kz/": prefixes.kz[0],
-  "https://oceanbasket.ru/": prefixes.ru[0],
-  "https://oceanbasket-shuv.ru/": prefixes.ru[1],
+  "https://oceanbasket.kz": prefixes.kz[0],
+  "https://oceanbasket.ru": prefixes.ru[0],
+  "https://oceanbasket-shuv.ru": prefixes.ru[1],
 };
 
-export const prefixToUrl = {
-  [prefixes.kz[0]]: "https://oceanbasket.kz/",
-  [prefixes.ru[0]]: "https://oceanbasket.ru/",
-  [prefixes.ru[1]]: "https://oceanbasket-shuv.ru/",
-};
-
+export const prefixToUrl = Object.entries(prefixes).map(([key, value]) => [
+  value,
+  key,
+]);
 export const hostUrl =
-  (hostUrls as any)[window.location.href] || prefixes.ru[0];
+  (hostUrls as any)[window.location.origin] || prefixes.ru[0];
 
 export const transformResponse: AxiosResponseTransformer[] = [
   (data) => {
