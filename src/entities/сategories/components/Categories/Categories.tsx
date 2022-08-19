@@ -1,6 +1,6 @@
 import { $categories } from "@features/choose-dishes/models";
 import { getCategories } from "@shared/api/switchable";
-import { createEffect, forward } from "effector";
+import { createEffect, forward, restore } from "effector";
 import { createGate, useStore } from "effector-react";
 import { useGate } from "effector-react/effector-react.cjs";
 import { useEffect, useState } from "react";
@@ -19,23 +19,14 @@ forward({
   to: [fetchCategoriesFx],
 });
 
+const $error = restore(fetchCategoriesFx.failData, null).map(Boolean);
+
 export function Categories({ className }: CategoriesProps) {
   useGate(categoriesGate);
 
   const categories = useStore($categories);
   const isCategoriesLoading = useStore(fetchCategoriesFx.pending);
-
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    const categories = fetchCategoriesFx.fail.watch((error) => {
-      console.error(error);
-      setIsError(true);
-    });
-    return () => {
-      categories();
-    };
-  }, []);
+  const isError = useStore($error);
 
   if (isError) {
     return null;
