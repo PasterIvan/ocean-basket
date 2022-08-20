@@ -2,11 +2,11 @@ import axios, { AxiosResponseTransformer } from "axios";
 
 export const prefixes = {
   kz: {
-    0: "https://oceanbasket.kz/oceanBasket/public",
+    0: "https://oceanbasket.kz/",
   },
   ru: {
-    0: "https://oceanbasket.ru/oceanBasket/public",
-    1: "https://oceanbasket-shuv.ru/oceanBasket/public",
+    0: "https://oceanbasket.ru/",
+    1: "https://oceanbasket-shuv.ru/",
   },
 } as const;
 
@@ -17,7 +17,7 @@ export const hostUrls = {
 } as const;
 
 export const prefixToUrl = Object.fromEntries(
-  Object.entries(prefixes).map(([key, value]) => [value, key])
+  Object.entries(hostUrls).map(([key, value]) => [value, key])
 ) as { [K in keyof typeof hostUrls as typeof hostUrls[K]]: K };
 export const hostUrl =
   (hostUrls as any)[window.location.origin] || prefixes.ru[0];

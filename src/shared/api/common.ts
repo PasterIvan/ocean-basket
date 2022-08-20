@@ -3,7 +3,7 @@ import { ModifierType } from "@features/choose-dishes/models";
 import axios from "axios";
 import { baseApi, hostUrl } from "./base";
 
-export const apiBaseUrl = "/api";
+export const apiBaseUrl = "/oceanBasket/public/api";
 
 export const EMPTY_STRING = "-";
 
