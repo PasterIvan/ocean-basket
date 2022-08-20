@@ -76,7 +76,7 @@ export const postOrder = (
   params: OrderTypeParams
 ): Promise<{ order_id?: number }> => {
   return baseApi
-    .post(`orders/submit`, params)
+    .post(`${apiBaseUrl}/orders/submit`, params)
     .then((response) => response.data);
 };
 
