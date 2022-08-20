@@ -2,11 +2,11 @@ import axios, { AxiosResponseTransformer } from "axios";
 
 export const prefixes = {
   kz: {
-    0: "https://oceanbasket.kz/",
+    0: "https://oceanbasket.kz/oceanBasket/public",
   },
   ru: {
-    0: "https://oceanbasket.ru/",
-    1: "https://oceanbasket-shuv.ru/",
+    0: "https://oceanbasket.ru/oceanBasket/public",
+    1: "https://oceanbasket-shuv.ru/oceanBasket/public",
   },
 } as const;
 
