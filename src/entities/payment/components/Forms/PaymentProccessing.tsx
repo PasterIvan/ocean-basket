@@ -89,7 +89,7 @@ const merchantLogins = {
 };
 
 export const $merchantLogin = createStore(
-  urlToMerchantLogins[window.location.origin] || urlToMerchantLogins[1]
+  urlToMerchantLogins[window.location.origin] || urlToMerchantLogins[hosts[1]]
 ).on(combine([$rus, $hostUrl]), (_, [rus, hostUrl]) => {
   return (
     (merchantLogins as any)[rus ? "ru" : "kz"]?.[hostUrl] || "Ocean_Basket"

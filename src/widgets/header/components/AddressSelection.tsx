@@ -39,14 +39,29 @@ export const AddressSelection = ({ className }: { className?: string }) => {
         .flatMap(({ regions }) => regions)
         .flatMap(({ region, addresses }) => ({
           region,
-          addresses: addresses.flatMap(({ address }) => address),
+          addresses: addresses.flatMap(({ address, prefix }) => ({
+            address,
+            prefix,
+          })),
         })),
     [isRus]
   );
 
   useEffect(() => {
     if (!restaurant) {
-      onRestaurantSelection(addressesList[0].addresses[0]);
+      const targetAddressList = addressesList.find((region) =>
+        region.addresses
+          .map(({ prefix }) => prefix)
+          .includes(window.location.origin)
+      );
+
+      const targetAddress = targetAddressList?.addresses.find(
+        ({ prefix }) => prefix === window.location.origin
+      );
+
+      onRestaurantSelection(
+        targetAddress?.address || addressesList[0].addresses[0].address
+      );
     }
   }, [restaurant, addressesList]);
 
@@ -73,7 +88,7 @@ export const AddressSelection = ({ className }: { className?: string }) => {
         >
           {addressesList.map(({ region, addresses }) => (
             <optgroup key={region} label={region}>
-              {addresses.map((address) => (
+              {addresses.map(({ address }) => (
                 <option key={address} value={address}>
                   {address}
                 </option>
