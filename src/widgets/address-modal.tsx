@@ -30,10 +30,17 @@ const onConfirm = createEvent();
 
 export const $isConfirmed = createStore(getIsKz()).on(onConfirm, () => true);
 
-export const getRestaurantFx = createEffect(getRestaurant);
+export const getRestaurantFx = createEffect((props: any) => {
+  console.log("props", props);
+  return getRestaurant(props);
+});
 
 getRestaurantFx.failData.watch(() => {
   toast.error("Ошибка при отправке адреса");
+});
+
+getRestaurantFx.doneData.watch((data) => {
+  console.log("getRestaurantFx donedata", data);
 });
 
 sample({
@@ -58,7 +65,10 @@ sample({
           href.searchParams.set(key, form[key]?.toString() || "");
         });
 
-      // window.location.replace(href);
+      //@ts-ignore
+      if (!window.stopRedirect) {
+        window.location.replace(href);
+      }
 
       return;
     }
