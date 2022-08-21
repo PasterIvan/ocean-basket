@@ -36,7 +36,9 @@ export const freeSums = {
   },
 };
 
-export const $freeSum = createStore(5000);
+export const $freeSum = createStore(
+  (freeSums as any)[($hostUrl as any).getState() as any] || 5000
+);
 
 sample({
   source: combine([$rus, $hostUrl]),
