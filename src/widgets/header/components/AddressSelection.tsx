@@ -39,7 +39,8 @@ export const AddressSelection = ({ className }: { className?: string }) => {
         .flatMap(({ regions }) => regions)
         .flatMap(({ region, addresses }) => ({
           region,
-          addresses: addresses.flatMap(({ address, prefix }) => ({
+          addresses: addresses.flatMap(({ address, prefix, url }) => ({
+            url,
             address,
             prefix,
           })),
@@ -50,13 +51,11 @@ export const AddressSelection = ({ className }: { className?: string }) => {
   useEffect(() => {
     if (!restaurant) {
       const targetAddressList = addressesList.find((region) =>
-        region.addresses
-          .map(({ prefix }) => prefix)
-          .includes(window.location.origin)
+        region.addresses.map(({ url }) => url).includes(window.location.origin)
       );
 
       const targetAddress = targetAddressList?.addresses.find(
-        ({ prefix }) => prefix === window.location.origin
+        ({ url }) => url === window.location.origin
       );
 
       onRestaurantSelection(

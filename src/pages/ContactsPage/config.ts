@@ -1,4 +1,4 @@
-import { prefixes } from "@shared/api/base";
+import { hosts, prefixes } from "@shared/api/base";
 
 export type Address = {
   prefix: string;
@@ -6,6 +6,7 @@ export type Address = {
   number: string;
   gps: number[];
   email?: string;
+  url?: string;
 };
 
 export type Region = {
@@ -20,9 +21,6 @@ export type Country = {
   defaultEmail: string;
 };
 
-
-
-
 export const addresses: Country[] = [
   {
     country_label: "Москва",
@@ -32,6 +30,7 @@ export const addresses: Country[] = [
         region: "Москва",
         addresses: [
           {
+            url: hosts[1],
             prefix: prefixes.ru[0],
             address: "ул. Мясницкая, д. 11, м. Лубянка",
             number: "+7 (977) 456 2221",
@@ -39,6 +38,7 @@ export const addresses: Country[] = [
             email: "marketing@oceanbasket.ru",
           },
           {
+            url: hosts[2],
             prefix: prefixes.ru[1],
             address:
               "Мичуринский проспект, д. 7, м. Ломоносовский проспект / м. Раменки",
@@ -59,6 +59,7 @@ export const addresses: Country[] = [
         region: "Алматы",
         addresses: [
           {
+            url: hosts[0],
             prefix: prefixes.kz[0],
             address:
               "Алмалинский район, ул. Казыбек би, дом 50, почтовый индекс 050000",
