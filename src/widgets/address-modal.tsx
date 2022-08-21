@@ -30,17 +30,10 @@ const onConfirm = createEvent();
 
 export const $isConfirmed = createStore(getIsKz()).on(onConfirm, () => true);
 
-export const getRestaurantFx = createEffect((props: any) => {
-  console.log("props", props);
-  return getRestaurant(props);
-});
+export const getRestaurantFx = createEffect(getRestaurant);
 
 getRestaurantFx.failData.watch(() => {
   toast.error("Ошибка при отправке адреса");
-});
-
-getRestaurantFx.doneData.watch((data) => {
-  console.log("getRestaurantFx donedata", data);
 });
 
 sample({

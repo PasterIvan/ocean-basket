@@ -19,7 +19,6 @@ import ContactCard from "./contact-card";
 import Radio from "./forms/radio/radio";
 import ScheduleGrid from "./schedule-grid";
 import { RightSideView } from "./unverified-item-list";
-import { getIsKz } from "@shared/lib/functional-utils";
 import { $rus } from "@features/choose-dishes/models";
 import { getRestaurantFx } from "@widgets/address-modal";
 import { $hostUrl } from "@shared/api/switchable";
@@ -99,11 +98,6 @@ export enum AddressType {
 
 export const LOCATION_KZ_SUM = { value: 2000 };
 
-export const $addSums = createStore<{ falseSum: number; trueSum: number }>({
-  falseSum: 500,
-  trueSum: 250,
-});
-
 export const addSums = {
   [prefixes.ru[0]]: {
     falseSum: 500,
@@ -118,6 +112,13 @@ export const addSums = {
     trueSum: 1000,
   },
 };
+
+export const $addSums = createStore<{ falseSum: number; trueSum: number }>(
+  (addSums as any)[($hostUrl as any).getState() as any] || {
+    falseSum: 500,
+    trueSum: 250,
+  }
+);
 
 $addSums.on($hostUrl, (_, payload) => {
   return (addSums as any)[payload];
@@ -268,8 +269,6 @@ export function PaymentProccessing() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [merchantLogin]
   );
-
-  console.log("pizdec", hostUrl, textes);
 
   return !isOrdered ? (
     <>
