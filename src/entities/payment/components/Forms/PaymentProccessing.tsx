@@ -22,7 +22,7 @@ import { RightSideView } from "./unverified-item-list";
 import { $rus } from "@features/choose-dishes/models";
 import { getRestaurantFx } from "@widgets/address-modal";
 import { $hostUrl } from "@shared/api/switchable";
-import { prefixes } from "@shared/api/base";
+import { hosts, prefixes } from "@shared/api/base";
 import { combine } from "effector";
 import classNames from "classnames";
 
@@ -72,6 +72,12 @@ export const makeTelegrammDescription = (
   // );
 };
 
+const urlToMerchantLogins = {
+  [hosts[0]]: "OceanBasketKZ",
+  [hosts[1]]: "Ocean_Basket",
+  [hosts[2]]: "OceanBasketShu",
+};
+
 const merchantLogins = {
   kz: {
     [prefixes.kz[0]]: "OceanBasketKZ",
@@ -82,14 +88,13 @@ const merchantLogins = {
   },
 };
 
-export const $merchantLogin = createStore("Ocean_Basket").on(
-  combine([$rus, $hostUrl]),
-  (_, [rus, hostUrl]) => {
-    return (
-      (merchantLogins as any)[rus ? "ru" : "kz"]?.[hostUrl] || "Ocean_Basket"
-    );
-  }
-);
+export const $merchantLogin = createStore(
+  urlToMerchantLogins[window.location.origin] || urlToMerchantLogins[1]
+).on(combine([$rus, $hostUrl]), (_, [rus, hostUrl]) => {
+  return (
+    (merchantLogins as any)[rus ? "ru" : "kz"]?.[hostUrl] || "Ocean_Basket"
+  );
+});
 
 export enum AddressType {
   Billing = "billing",
