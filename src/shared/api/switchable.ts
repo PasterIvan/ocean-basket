@@ -1,7 +1,7 @@
 import { ModifierType } from "@features/choose-dishes/models";
 import axios from "axios";
 import { createEvent, createStore } from "effector";
-import { baseApi, hostUrl, prefixes, transformResponse } from "./base";
+import { hostUrl, prefixes, transformResponse } from "./base";
 import { Dish, Category, apiBaseUrl, DishStatus } from "./common";
 
 export const onChangeHostUrl = createEvent<string>();

@@ -133,10 +133,16 @@ $addSums.on($hostUrl, (_, payload) => {
   return (addSums as any)[payload];
 });
 
-const onLocation = createEvent<boolean>();
+export const onLocation = createEvent<boolean>();
 export const $location = createStore<boolean | null>(
   getFromStorage("location", false)
-).on(onLocation, (_, value) => value);
+)
+  .on(onLocation, (_, value) => value)
+  .on($hostUrl, (location, prefix) => {
+    if (prefix === prefixes.ru[1] && location === null) {
+      return true;
+    }
+  });
 
 $location.watch((value) => setToStorage("location", value));
 
@@ -279,6 +285,8 @@ export function PaymentProccessing() {
     [merchantLogin]
   );
 
+  const showOptions = isRub && (totalAmount ?? 0) < freeSum;
+
   return !isOrdered ? (
     <>
       <div className="py-8 sm:px-4 lg:py-10 lg:px-8 xl:py-14 xl:px-16 2xl:px-20 bg-gray-100">
@@ -320,8 +328,7 @@ export function PaymentProccessing() {
               }}
               emptyMessage="Адрес не заполнен"
               after={
-                !isRub ? undefined : (totalAmount ?? 0) >=
-                  freeSum ? undefined : (
+                !showOptions ? undefined : (
                   <div className="flex gap-3 flex-wrap">
                     <div className="w-[16rem] text-xs flex justify-between">
                       {!isRightMode && (

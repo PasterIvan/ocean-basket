@@ -26,7 +26,7 @@ export const prefixToUrl = Object.fromEntries(
   Object.entries(hostUrls).map(([key, value]) => [value, key])
 ) as { [K in keyof typeof hostUrls as typeof hostUrls[K]]: K };
 
-export const hostUrl =
+export const hostUrl: string =
   (hostUrls as any)[window.location.origin] || prefixes.ru[0];
 
 export const transformResponse: AxiosResponseTransformer[] = [
