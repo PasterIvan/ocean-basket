@@ -61,6 +61,8 @@ sample({
       //@ts-ignore
       if (!window.stopRedirect) {
         window.location.replace(href);
+      } else {
+        setAdressModalOpen(false);
       }
 
       return;

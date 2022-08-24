@@ -211,10 +211,11 @@ const textes = {
     )}.`,
   ],
   [prefixes.ru[1]]: [
-    `Заказ ниже ${freeSums.ru[prefixes.ru[1]]} р., доставка будет стоить ${
-      addSums[prefixes.ru[1]].trueSum
-    } р.`,
-    `“Я живу в ЖК Шуваловский” — бесплатная доставка`,
+    `Заказ ниже ${freeSums.ru[prefixes.ru[1]]} р. + ${formatPrice(
+      addSums[prefixes.ru[1]].trueSum,
+      true
+    )}.`,
+    `“Я живу в ЖК Шуваловский” — бесплатная доставка.`,
   ],
 };
 
@@ -237,7 +238,7 @@ export function PaymentProccessing() {
   const { totalAmount } = useStore($cartSizes);
   const merchantLogin = useStore($merchantLogin);
 
-  const isRightMode = Boolean(hostUrl === prefixes.ru[1]);
+  const isRightMode = false;
 
   const onSubmitHandler = useCallback(
     (
