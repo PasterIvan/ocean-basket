@@ -211,7 +211,7 @@ const textes = {
     )}.`,
   ],
   [prefixes.ru[1]]: [
-    `Заказ ниже ${freeSums.ru[prefixes.ru[1]]} р. + ${formatPrice(
+    `Заказ ниже ${freeSums.ru[prefixes.ru[1]]} р. — + ${formatPrice(
       addSums[prefixes.ru[1]].trueSum,
       true
     )}.`,
@@ -331,7 +331,7 @@ export function PaymentProccessing() {
               after={
                 !showOptions ? undefined : (
                   <div className="flex gap-3 flex-wrap">
-                    <div className="w-[16rem] text-xs flex justify-between">
+                    <div className="w-[16rem] text-xs flex">
                       {!isRightMode && (
                         <Radio
                           checked={location === true}
@@ -345,14 +345,14 @@ export function PaymentProccessing() {
                       <div
                         className={classNames(
                           isRightMode && "text-center",
-                          "cursor-pointer select-none"
+                          "cursor-pointer select-none flex items-center"
                         )}
                         onClick={() => onLocation(true)}
                       >
                         {(textes as any)[hostUrl]?.[0]}
                       </div>
                     </div>
-                    <div className="w-[16rem] text-xs flex justify-between">
+                    <div className="w-[16rem] text-xs flex">
                       <Radio
                         checked={location === false}
                         onClick={() => {
@@ -368,7 +368,7 @@ export function PaymentProccessing() {
                         id={"outside TTK"}
                       />
                       <div
-                        className="cursor-pointer select-none"
+                        className="cursor-pointer select-none flex items-center"
                         onClick={() => {
                           if (isRightMode) {
                             onLocation(!location);
