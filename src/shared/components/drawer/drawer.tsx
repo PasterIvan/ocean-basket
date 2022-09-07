@@ -10,8 +10,8 @@ import cn from "classnames";
 import { fadeInOut } from "@entities/cart/lib/fade-in-out";
 import { fadeInLeft } from "@entities/cart/lib/fade-in-left";
 import { fadeInRight } from "@entities/cart/lib/fade-in-right";
-import { Scrollbar } from "../Scrollbar";
 import { useSwipeable } from "react-swipeable";
+import { Scrollbar } from "src/shared/components/Scrollbar";
 
 interface DrawerProps {
   children: any;

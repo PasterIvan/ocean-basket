@@ -1,9 +1,9 @@
 import axios, { AxiosResponseTransformer } from "axios";
 
 export const hosts = [
-  "https://oceanbasket.kz",
-  "https://oceanbasket.ru",
-  "https://oceanbasket-shuv.ru",
+  'https://oceanbasket.kz',
+  'https://oceanbasket.ru',
+  'https://oceanbasket-shuv.ru',
 ];
 
 export const prefixes = {
