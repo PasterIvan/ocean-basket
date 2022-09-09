@@ -28,6 +28,7 @@ window.onChangePrefix = () => {
   console.log("prefix", $hostUrl.getState());
 };
 
+
 export const getDishes = (): Promise<{ [category: string]: Dish[] }> => {
   return axios
     .get(`${apiBaseUrl}/dishes`, {

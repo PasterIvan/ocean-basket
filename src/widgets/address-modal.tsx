@@ -6,7 +6,7 @@ import AddressForm, {
   onSubmitForm,
 } from "@entities/payment/components/Forms/address-form";
 import Modal from "@entities/payment/components/Forms/modal";
-import { getRestaurant } from "@shared/api/common";
+import {getRestaurant} from "@shared/api/common";
 import {
   combine,
   createEffect,
@@ -15,16 +15,18 @@ import {
   restore,
   sample,
 } from "effector";
-import { useStore } from "effector-react";
-import { toast } from "react-toastify";
-import { getIsKz } from "@shared/lib/functional-utils";
-import { onChangeHostUrl } from "@shared/api/switchable";
-import { $rus } from "@features/choose-dishes/models";
-import { onSetRestaurant } from "./header/components/AddressSelection";
-import { prefixToUrl } from "@shared/api/base";
-import { useEffect, useState } from "react";
-import { RoutesConfig } from "@shared/lib/routes-config";
-import { useNavigate } from "react-router-dom";
+import {useStore} from "effector-react";
+import {toast} from "react-toastify";
+import {getIsKz} from "@shared/lib/functional-utils";
+import {$hostUrl, onChangeHostUrl} from "@shared/api/switchable";
+import {$rus} from "@features/choose-dishes/models";
+import {onSetRestaurant} from "./header/components/AddressSelection";
+import {prefixToUrl} from "@shared/api/base";
+import {useEffect, useState} from "react";
+import {RoutesConfig} from "@shared/lib/routes-config";
+import {useNavigate} from "react-router-dom";
+import {propsGetter} from "@pages/DetailsPage/lib";
+import {addressFormMessage} from "@widgets/configAddressModal";
 
 const onConfirm = createEvent();
 
@@ -95,12 +97,17 @@ export const isGpsValid = (gps: any) => {
   );
 };
 
+
 export const AddressModal = () => {
   const navigate = useNavigate();
 
+
   const [initCoords, setInitCoords] =
     useState<[number | null, number | null]>();
+
   const isRus = useStore($rus);
+  const prefix = useStore($hostUrl);
+  const text = propsGetter(addressFormMessage, isRus, prefix)?.toString()
 
   const isOpen = useStore($isAdressModalOpen);
   const isLoading = useStore(getRestaurantFx.pending);
@@ -144,11 +151,11 @@ export const AddressModal = () => {
     >
       <AddressForm
         initialCoords={initCoords}
-        subLabel={
-          isRus
-            ? "Мы доставляем наши блюда по всей Москве в пределах МКАД. Если ваш адрес доставки находится за пределами МКАД, ресторан оформит возврат денежных средств и отменит заказ. Заказы за МКАД оформляются по номеру телефона в индивидуальном порядке. Благодарим за понимание."
-            : "Мы доставляем наши блюда в пределах зоны: пр. Райымбека - ул. Калдаякова - ул. Сатпаева - ул. Ауезова. Если ваш адрес доставки находится вне зоны, ресторан оформит возврат денежных средств и отменит заказ. Заказы вне зоны оформляются по номеру телефона в индивидуальном порядке. Благодарим за понимание."
-        }
+        subLabel={text}
+          // isRus
+          //   ? "Мы доставляем наши блюда по всей Москве в пределах МКАД. Если ваш адрес доставки находится за пределами МКАД, ресторан оформит возврат денежных средств и отменит заказ. Заказы за МКАД оформляются по номеру телефона в индивидуальном порядке. Благодарим за понимание."
+          //   : "Мы доставляем наши блюда в пределах зоны: пр. Райымбека - ул. Калдаякова - ул. Сатпаева - ул. Ауезова. Если ваш адрес доставки находится вне зоны, ресторан оформит возврат денежных средств и отменит заказ. Заказы вне зоны оформляются по номеру телефона в индивидуальном порядке. Благодарим за понимание."
+
         isLoading={isLoading}
         switchIconEnabled={false}
         onSubmit={onSubmitHandler}

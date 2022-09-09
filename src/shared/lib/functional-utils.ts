@@ -91,6 +91,7 @@ export const stringifyValueSafely = (value: unknown): string => {
 export const getIsKz = () => {
   const isKz =
     window.location.hostname.includes(".kz") ||
+    window.location.hostname.includes("localhost") ||
     window.location.hostname.includes("91.201.214.167");
 
   console.log("iz kz", isKz);

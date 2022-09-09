@@ -34,7 +34,7 @@ export const AddressSelection = ({ className }: { className?: string }) => {
     () =>
       addresses
         .filter(({ country_label }) =>
-          isRus ? country_label === "Москва" : country_label === "Казахстан"
+          isRus ? country_label === "Россия" : country_label === "Казахстан"
         )
         .flatMap(({ regions }) => regions)
         .flatMap(({ region, addresses }) => ({

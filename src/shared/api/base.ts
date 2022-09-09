@@ -1,25 +1,28 @@
 import axios, { AxiosResponseTransformer } from "axios";
 
 export const hosts = [
-  'https://oceanbasket.kz',
   'https://oceanbasket.ru',
   'https://oceanbasket-shuv.ru',
+  'https://oceanbasket.kz',
+  'https://oceanbasket-msw.kz',
 ];
 
 export const prefixes = {
-  kz: {
-    0: "https://oceanbasket.kz/oceanBasket/public/",
-  },
   ru: {
     0: "https://oceanbasket.ru/oceanBasket/public/",
     1: "https://oceanbasket-shuv.ru/oceanBasket/public/",
   },
+  kz: {
+    0: "https://oceanbasket.kz/oceanBasket/public/",
+    1: "https://oceanbasket-msw.kz/oceanBasket/public/",
+  },
 } as const;
 
 export const hostUrls = {
-  [hosts[0]]: prefixes.kz[0],
-  [hosts[1]]: prefixes.ru[0],
-  [hosts[2]]: prefixes.ru[1],
+  [hosts[0]]: prefixes.ru[0],
+  [hosts[1]]: prefixes.ru[1],
+  [hosts[2]]: prefixes.kz[0],
+  [hosts[3]]: prefixes.kz[1],
 } as const;
 
 export const prefixToUrl = Object.fromEntries(
@@ -27,7 +30,7 @@ export const prefixToUrl = Object.fromEntries(
 ) as { [K in keyof typeof hostUrls as typeof hostUrls[K]]: K };
 
 export const hostUrl: string =
-  (hostUrls as any)[window.location.origin] || prefixes.ru[0];
+  (hostUrls as any)[window.location.origin] || prefixes.kz[1];
 
 export const transformResponse: AxiosResponseTransformer[] = [
   (data) => {

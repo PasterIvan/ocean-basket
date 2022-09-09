@@ -25,7 +25,6 @@ export const RightSideView = () => {
 
   const location = useStore($location);
   const grandTotal = useStore($grandTotal);
-
   const hostUrl = useStore($hostUrl);
   const freeSum = useStore($freeSum);
 

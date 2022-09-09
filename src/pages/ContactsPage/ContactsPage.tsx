@@ -99,7 +99,7 @@ export function ContactsPage() {
     () =>
       addresses
         .filter(({ country_label }) =>
-          isRus ? country_label === "Москва" : country_label === "Казахстан"
+          isRus ? country_label === "Россия" : country_label === "Казахстан"
         )
         .flatMap(({ regions }) => regions)
         .flatMap(({ addresses }) => addresses.map(({ gps }) => gps)),

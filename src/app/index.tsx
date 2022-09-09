@@ -15,8 +15,11 @@ import {
 } from "@shared/components/LoadingContainer/FishAnimationContainer";
 import {YMInitializer} from "react-yandex-metrika";
 import {AddressModal} from "@widgets/address-modal";
+import {$hostUrl} from "@shared/api/switchable";
+import {prefixToUrl} from "@shared/api/base";
 
 function App() {
+    console.log(prefixToUrl)
   return (
     <FishAnimationContainer>
       <YMInitializer

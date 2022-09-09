@@ -67,15 +67,15 @@ function FooterContactsBlock({
 
   return (
     <div className={classNames(className)}>
-      {item.country_label && (
-        <div className="text-base font-medium">{item.country_label}</div>
-      )}
+      {/*{item.country_label && (*/}
+      {/*  <div className="pb-4 text-base font-medium">{item.country_label}</div>*/}
+      {/*)}*/}
       <div className="flex flex-col font-light text-sm">
-        {item.regions.map(({ region_label: name, addresses }, idx) => {
+        {item.regions.map(({ region: name, addresses }, idx) => {
           return (
             <React.Fragment key={idx}>
               {name && (
-                <div className={classNames("pt-4 text-sm font-medium")}>
+                <div className={classNames("pb-4 text-base font-medium")}>
                   {name}
                 </div>
               )}
@@ -83,7 +83,7 @@ function FooterContactsBlock({
                 <div
                   key={idx}
                   className={classNames(
-                    "pt-4",
+                    "pb-4",
                     "flex flex-col sm:flex-row justify-between"
                   )}
                 >

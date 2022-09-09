@@ -25,14 +25,17 @@ import {getRestaurantFx} from "@widgets/address-modal";
 import {$hostUrl} from "@shared/api/switchable";
 import {hosts, prefixes} from "@shared/api/base";
 import classNames from "classnames";
+import {propsGetter} from "@pages/DetailsPage/lib";
+import {addressFormMessage} from "@widgets/configAddressModal";
 
 export const freeSums = {
-    kz: {
-        [prefixes.kz[0]]: 15000,
-    },
     ru: {
         [prefixes.ru[0]]: 5000,
         [prefixes.ru[1]]: 4000,
+    },
+    kz: {
+        [prefixes.kz[0]]: 15000,
+        [prefixes.kz[1]]: 15000,
     },
 };
 
@@ -77,27 +80,29 @@ export const makeTelegrammDescription = (
 };
 
 export const urlToMerchantLogins = {
-    [hosts[0]]: "OceanBasketKZ",
-    [hosts[1]]: "Ocean_Basket",
-    [hosts[2]]: "OceanBasketShu",
+    [hosts[0]]: "Ocean_Basket",
+    [hosts[1]]: "OceanBasketShu",
+    [hosts[2]]: "OceanBasketKZ",
+    [hosts[3]]: "OceanBasketNQZ",
 };
 
 const merchantLogins = {
-    kz: {
-        [prefixes.kz[0]]: "OceanBasketKZ",
-    },
     ru: {
         [prefixes.ru[0]]: "Ocean_Basket",
         [prefixes.ru[1]]: "OceanBasketShu",
     },
+    kz: {
+        [prefixes.kz[0]]: "OceanBasketKZ",
+        [prefixes.kz[1]]: "OceanBasketNQZ",
+    },
 };
 
 export const $merchantLogin = createStore(
-        urlToMerchantLogins[window.location.origin] || urlToMerchantLogins[hosts[1]]
-    ).on(combine([$rus, $hostUrl]), (_, [rus, hostUrl]) => {
-  return (
-    (merchantLogins as any)[rus ? "ru" : "kz"]?.[hostUrl] || "Ocean_Basket"
-  );
+    urlToMerchantLogins[window.location.origin] || urlToMerchantLogins[hosts[0]]
+).on(combine([$rus, $hostUrl]), (_, [rus, hostUrl]) => {
+    return (
+        (merchantLogins as any)[rus ? "ru" : "kz"]?.[hostUrl] || "Ocean_Basket"
+    );
 });
 
 export enum AddressType {
@@ -119,6 +124,10 @@ export const addSums = {
     [prefixes.kz[0]]: {
         falseSum: 2000,
         trueSum: 1000,
+    },
+    [prefixes.kz[1]]: {
+        falseSum: 2000,
+        trueSum: 2000,
     },
 };
 
@@ -221,7 +230,7 @@ const textes = {
 
 export function PaymentProccessing() {
     const cartSizes = useStore($cartSizes);
-    const isRub = useStore($rus);
+    const isRus = useStore($rus);
     const isLoading = useStore(getRestaurantFx.pending);
 
     const [isOrdered, setIsOrdered] = useState(false);
@@ -237,6 +246,9 @@ export function PaymentProccessing() {
     const location = useStore($location);
     const {totalAmount} = useStore($cartSizes);
     const merchantLogin = useStore($merchantLogin);
+
+    const prefix = useStore($hostUrl);
+    const text = propsGetter(addressFormMessage, isRus, prefix)?.toString()
 
     const isRightMode = false;
 
@@ -286,7 +298,7 @@ export function PaymentProccessing() {
         [merchantLogin]
     );
 
-    const showOptions = isRub && (totalAmount ?? 0) < freeSum;
+    const showOptions = isRus && (totalAmount ?? 0) < freeSum;
 
     return !isOrdered ? (
         <>
@@ -300,11 +312,11 @@ export function PaymentProccessing() {
                             editLabel="Изменить адрес"
                             className="shadow-700 bg-light p-5 md:p-8"
                             label="Адрес доставки"
-                            subLabel={
-                                isRub
-                                    ? "Мы доставляем наши блюда по всей Москве в пределах МКАД. Если ваш адрес доставки находится за пределами МКАД, ресторан оформит возврат денежных средств и отменит заказ. Заказы за МКАД оформляются по номеру телефона в индивидуальном порядке. Благодарим за понимание."
-                                    : "Мы доставляем наши блюда в пределах зоны: пр. Райымбека - ул. Калдаякова - ул. Сатпаева - ул. Ауезова. Если ваш адрес доставки находится вне зоны, ресторан оформит возврат денежных средств и отменит заказ. Заказы вне зоны оформляются по номеру телефона в индивидуальном порядке. Благодарим за понимание."
-                            }
+                            subLabel={text}
+                            //     isRub
+                            //         ? "Мы доставляем наши блюда по всей Москве в пределах МКАД. Если ваш адрес доставки находится за пределами МКАД, ресторан оформит возврат денежных средств и отменит заказ. Заказы за МКАД оформляются по номеру телефона в индивидуальном порядке. Благодарим за понимание."
+                            //         : "Мы доставляем наши блюда в пределах зоны: пр. Райымбека - ул. Калдаякова - ул. Сатпаева - ул. Ауезова. Если ваш адрес доставки находится вне зоны, ресторан оформит возврат денежных средств и отменит заказ. Заказы вне зоны оформляются по номеру телефона в индивидуальном порядке. Благодарим за понимание."
+                            // }
                             count={1}
                             form={AddressForm}
                             data={form}
