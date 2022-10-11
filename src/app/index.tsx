@@ -15,39 +15,36 @@ import {
 } from "@shared/components/LoadingContainer/FishAnimationContainer";
 import {YMInitializer} from "react-yandex-metrika";
 import {AddressModal} from "@widgets/address-modal";
-import {$hostUrl} from "@shared/api/switchable";
-import {prefixToUrl} from "@shared/api/base";
 
 function App() {
-    console.log(prefixToUrl)
-  return (
-    <FishAnimationContainer>
-      <YMInitializer
-        accounts={[87286996]}
-        options={{
-          clickmap: true,
-          trackLinks: true,
-          accurateTrackBounce: true,
-          webvisor: true,
-          ecommerce: "dataLayer",
-        }}
-      />
-      <AddressModal />
-      <GDRPPolicy />
-      <CartSidebar />
-      <MobileMainMenu />
-      <div className="flex flex-col max-h-screen">
-        <Header />
-        <ScrollContainer>
-          <div className={styles.content}>
-            <Routing />
-          </div>
-          <MobileNavigation />
-          <Footer />
-        </ScrollContainer>
-      </div>
-    </FishAnimationContainer>
-  );
+    return (
+        <FishAnimationContainer>
+            <YMInitializer
+                accounts={[87286996]}
+                options={{
+                    clickmap: true,
+                    trackLinks: true,
+                    accurateTrackBounce: true,
+                    webvisor: true,
+                    ecommerce: "dataLayer",
+                }}
+            />
+            <AddressModal/>
+            <GDRPPolicy/>
+            <CartSidebar/>
+            <MobileMainMenu/>
+            <div className="flex flex-col max-h-screen">
+                <Header/>
+                <ScrollContainer>
+                    <div className={styles.content}>
+                        <Routing/>
+                    </div>
+                    <MobileNavigation/>
+                    <Footer/>
+                </ScrollContainer>
+            </div>
+        </FishAnimationContainer>
+    );
 }
 
 export default withProviders(App);

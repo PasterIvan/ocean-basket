@@ -48,7 +48,7 @@ sample({
     source: combine([$rus, $hostUrl]),
     clock: [$rus, $hostUrl],
     fn: ([rus, hostUrl]) => {
-        return (minSums as any)[rus ? "ru" : "kz"]?.[hostUrl] || 2000;
+        return (minSums as any)[rus ? "ru" : "kz" ]?.[hostUrl] || 2000;
     },
     target: $minSum,
 });

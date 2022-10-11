@@ -1,11 +1,11 @@
-import { ModifierType } from "@features/choose-dishes/models";
-import { Dish } from "@shared/api/common";
-import { getModifiers } from "@shared/api/switchable";
+import {ModifierType} from "@features/choose-dishes/models";
+import {Dish} from "@shared/api/common";
+import {getModifiers} from "@shared/api/switchable";
 import Spinner from "@shared/components/spinner/spinner";
-import { createEffect, createStore } from "effector";
-import { useStore } from "effector-react";
-import { useEffect, useState } from "react";
-import { getDishFx } from "./add-dish-modal";
+import {createEffect, createStore} from "effector";
+import {useStore} from "effector-react";
+import {useEffect, useState} from "react";
+import {getDishFx} from "./add-dish-modal";
 import Details from "./details";
 
 const getModifiersFx = createEffect(getModifiers);
@@ -53,11 +53,11 @@ const Popup: React.FC<ProductPopupProps> = ({ product }) => {
 
   return (
     <article className="bg-light flex w-full max-w-6xl xl:min-w-[1152px] relative z-[51] md:rounded-xl">
-      {/* <ShortDetails
-        closeModal={() => {}}
-        product={product}
-        isSticky={showStickyShortDetails}
-      /> */}
+      {/*<ShortDetails*/}
+      {/*  closeModal={() => {}}*/}
+      {/*  product={product}*/}
+      {/*  isSticky={showStickyShortDetails}*/}
+      {/*/>*/}
       <Details
         modifiers={modifiers}
         product={product}

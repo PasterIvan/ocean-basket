@@ -324,7 +324,7 @@ export const accessToken = `${appId}|${clientToken}`;
 export function SubscriptionSection({ isWaves = false }) {
   return (
     <div>
-      <EmailSection isWaves={isWaves} />
+      {/*<EmailSection isWaves={isWaves} />*/}
       <div className="flex justify-center pt-24 lg:pt-36 relative">
         <img
           alt="blue waves"
