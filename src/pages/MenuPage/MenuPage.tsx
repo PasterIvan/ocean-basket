@@ -7,7 +7,8 @@ import FilterBar from "@widgets/filter-bar/filter-bar";
 import { ShopClosedModal } from "@widgets/ShopClosedModal";
 import classNames from "classnames";
 import { useEffect, useMemo } from "react";
-import { ChooseDishes } from "../../features/choose-dishes/ui";
+import {ChooseDishes} from "@features/choose-dishes/ui";
+
 
 export function MenuPage() {
   useEffect(() => {

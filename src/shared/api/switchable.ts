@@ -18,14 +18,14 @@ window.onChangePrefix = () => {
     onChangeHostUrl(prefixes.ru[0]);
     flag = false;
 
-    console.log("prefix", $hostUrl.getState());
+   // console.log("prefix", $hostUrl.getState());
     return;
   }
 
   onChangeHostUrl(prefixes.ru[1]);
   flag = true;
 
-  console.log("prefix", $hostUrl.getState());
+  //console.log("prefix", $hostUrl.getState());
 };
 
 

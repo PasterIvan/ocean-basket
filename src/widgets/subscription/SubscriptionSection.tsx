@@ -322,9 +322,10 @@ const appId = "676058906894334";
 export const accessToken = `${appId}|${clientToken}`;
 
 export function SubscriptionSection({ isWaves = false }) {
+  const isRus = useStore($rus);
   return (
     <div>
-      {/*<EmailSection isWaves={isWaves} />*/}
+      {isRus ? '' : <EmailSection isWaves={isWaves}/>}
       <div className="flex justify-center pt-24 lg:pt-36 relative">
         <img
           alt="blue waves"

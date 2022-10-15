@@ -5,6 +5,7 @@ export const hosts = [
   'https://oceanbasket-shuv.ru',
   'https://oceanbasket.kz',
   'https://oceanbasket-msw.kz',
+  'http://localhost:3000/',
 ];
 
 export const prefixes = {
@@ -30,7 +31,7 @@ export const prefixToUrl = Object.fromEntries(
 ) as { [K in keyof typeof hostUrls as typeof hostUrls[K]]: K };
 
 export const hostUrl: string =
-  (hostUrls as any)[window.location.origin] || prefixes.kz[1];
+  (hostUrls as any)[window.location.origin] || prefixes.kz[0];
 
 export const transformResponse: AxiosResponseTransformer[] = [
   (data) => {

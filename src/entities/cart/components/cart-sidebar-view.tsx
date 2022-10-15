@@ -19,7 +19,7 @@ import {
     combine,
     createEffect,
     createEvent,
-    createStore,
+    createStore, forward,
     sample,
 } from "effector";
 import {verifyPromocode} from "@shared/api/common";
@@ -41,17 +41,16 @@ export const minSums = {
         [prefixes.kz[1]]: 5000,
     },
 };
-
-export const $minSum = createStore(2000);
-
-sample({
-    source: combine([$rus, $hostUrl]),
-    clock: [$rus, $hostUrl],
-    fn: ([rus, hostUrl]) => {
-        return (minSums as any)[rus ? "ru" : "kz" ]?.[hostUrl] || 2000;
-    },
-    target: $minSum,
+const onSumChange = createEvent()
+export const $minSum = createStore(2000).on(onSumChange, (_, payload) => {
+    return payload
 });
+
+combine([$rus, $hostUrl]).watch(([rus, hostUrl]) => {
+    console.log(rus, hostUrl)
+    const res = (minSums as any)[rus ? "ru" : "kz"]?.[hostUrl] || 2000;
+    onSumChange(res)
+})
 
 export const EmptyCartPanel = ({
                                    noGutters = false,

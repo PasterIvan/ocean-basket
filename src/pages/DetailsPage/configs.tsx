@@ -89,8 +89,8 @@ export const deliveryAreaConfig = {
 
 export const minOrderPriceConfig = {
     kz: {
-        [prefixes.kz[1]]: `${minSums.kz[prefixes.kz[1]]} тенге*`,
         default: `${minSums.kz[prefixes.kz[0]]} тенге*`,
+        [prefixes.kz[1]]: `${minSums.kz[prefixes.kz[1]]} тенге*`,
     },
     ru: {
         default: `${minSums.ru[prefixes.ru[0]]} РУБ*`,
