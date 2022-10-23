@@ -36,6 +36,8 @@ export const freeSums = {
     kz: {
         [prefixes.kz[0]]: 15000,
         [prefixes.kz[1]]: 15000,
+        [prefixes.kz[2]]: 15000,
+        [prefixes.kz[3]]: 15000,
     },
 };
 
@@ -49,7 +51,7 @@ sample({
     source: combine([$rus, $hostUrl]),
     clock: [$rus, $hostUrl],
     fn: ([rus, hostUrl]) => {
-        return (freeSums as any)[rus ? "ru" : "kz"]?.[hostUrl] || 5000;
+        return (freeSums as any)[rus ? "ru" : "kz"]?.[hostUrl] || 2000;
     },
     target: $freeSum,
 });
@@ -84,6 +86,8 @@ export const urlToMerchantLogins = {
     [hosts[1]]: "OceanBasketShu",
     [hosts[2]]: "OceanBasketKZ",
     [hosts[3]]: "OceanBasket_mega",
+    [hosts[4]]: "OceanBasket_ALA",
+    [hosts[5]]: "OceanBasket_NQZ",
 };
 
 const merchantLogins = {
@@ -94,6 +98,8 @@ const merchantLogins = {
     kz: {
         [prefixes.kz[0]]: "OceanBasketKZ",
         [prefixes.kz[1]]: "OceanBasket_mega",
+        [prefixes.kz[2]]: "OceanBasket_ALA",
+        [prefixes.kz[3]]: "OceanBasket_NQZ",
     },
 };
 
@@ -126,6 +132,14 @@ export const addSums = {
         trueSum: 1000,
     },
     [prefixes.kz[1]]: {
+        falseSum: 2000,
+        trueSum: 2000,
+    },
+    [prefixes.kz[2]]: {
+        falseSum: 2000,
+        trueSum: 2000,
+    },
+    [prefixes.kz[3]]: {
         falseSum: 2000,
         trueSum: 2000,
     },

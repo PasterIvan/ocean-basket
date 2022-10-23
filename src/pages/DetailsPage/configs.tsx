@@ -8,11 +8,30 @@ import {
 import {prefixes} from "@shared/api/base";
 
 export const deliveryCostConfig = {
-    kz: {[prefixes.kz[1]]: (
+    kz: {
+        [prefixes.kz[1]]: (
             <ul>
                 <li>
                     Доставка по городу в пределах зоны при заказе от{" "}
                     {(freeSums as any).kz[prefixes.kz[1]]} тенге — бесплатная.
+                </li>
+                <li>В пределах зоны доставки — {LOCATION_KZ_SUM.value} тенге.</li>
+            </ul>
+        ),
+        [prefixes.kz[2]]: (
+            <ul>
+                <li>
+                    Доставка по городу в пределах зоны при заказе от{" "}
+                    {(freeSums as any).kz[prefixes.kz[2]]} тенге — бесплатная.
+                </li>
+                <li>В пределах зоны доставки — {LOCATION_KZ_SUM.value} тенге.</li>
+            </ul>
+        ),
+        [prefixes.kz[3]]: (
+            <ul>
+                <li>
+                    Доставка по городу в пределах зоны при заказе от{" "}
+                    {(freeSums as any).kz[prefixes.kz[3]]} тенге — бесплатная.
                 </li>
                 <li>В пределах зоны доставки — {LOCATION_KZ_SUM.value} тенге.</li>
             </ul>
@@ -60,8 +79,13 @@ export const deliveryCostConfig = {
 };
 
 export const takingOrdersConfig = {
-    kz: {[prefixes.kz[1]]:
+    kz: {
+        [prefixes.kz[1]]:
             "Прием заказов осуществляется с 10:00 до 22:30",
+        [prefixes.kz[2]]:
+            "Прием заказов осуществляется с 10:00 до 22:30",
+        [prefixes.kz[3]]:
+            "Прием заказов осуществляется: с понедельника по четверг с 10:00 до 22:30. с пятницы по воскресенье с 10:00 до 23:30",
         default: "Прием заказов осуществляется с 10:00 до 22:00",
     },
     ru: {
@@ -71,14 +95,11 @@ export const takingOrdersConfig = {
 
 export const deliveryAreaConfig = {
     kz: {
-        [prefixes.kz[1]]:
-            "Доставка производится по всему городу Нур-Султан.",
-        default: (
-            <ul>
-                <li>Доставка производится в г.Алматы в квадрате улиц:</li>
-                <li>пр. Райымбека - ул. Калдаякова - ул. Сатпаева - ул. Ауэзова</li>
-            </ul>
-        ),
+        [prefixes.kz[1]]: "Доставка производится по всему городу Нур-Султан.",
+        [prefixes.kz[2]]: "Доставка производится в г.Алматы в квадрате улиц: пр. Достык - пр. Аль-Фараби -  ул. Розыбакиева - ул. Толе би",
+        [prefixes.kz[3]]: "Доставка производится по всему городу Нур-Султан.",
+
+        default: "Доставка производится в г.Алматы в квадрате улиц: пр. Райымбека - ул. Калдаякова - ул. Сатпаева - ул. Ауэзова",
     },
     ru: {
         [prefixes.ru[1]]:
@@ -91,6 +112,8 @@ export const minOrderPriceConfig = {
     kz: {
         default: `${minSums.kz[prefixes.kz[0]]} тенге*`,
         [prefixes.kz[1]]: `${minSums.kz[prefixes.kz[1]]} тенге*`,
+        [prefixes.kz[2]]: `${minSums.kz[prefixes.kz[2]]} тенге*`,
+        [prefixes.kz[3]]: `${minSums.kz[prefixes.kz[3]]} тенге*`,
     },
     ru: {
         default: `${minSums.ru[prefixes.ru[0]]} РУБ*`,
@@ -100,6 +123,9 @@ export const minOrderPriceConfig = {
 
 export const freeDeliveryConfig = {
     kz: {
+        [prefixes.kz[1]]: `При заказе выше ${freeSums.kz[prefixes.kz[1]]} тенге.`,
+        [prefixes.kz[2]]: `При заказе выше ${freeSums.kz[prefixes.kz[2]]} тенге.`,
+        [prefixes.kz[3]]: `При заказе выше ${freeSums.kz[prefixes.kz[3]]} тенге.`,
         default: `При заказе выше ${freeSums.kz[prefixes.kz[0]]} тенге.`,
     },
     ru: {
@@ -125,6 +151,12 @@ export const legalAddressConfig = {
     kz: {
         [prefixes.kz[1]]: (
             'Республика Казахстан, город Нур-Султан, район Есиль, проспект Кабанбай батыра, здание 62,  почтовый индекс 010000'
+        ),
+        [prefixes.kz[2]]: (
+            'Республика Казахстан, город Алматы, район Медеуский, микрорайон Самал-2, дом 111,  почтовый индекс 050000'
+        ),
+        [prefixes.kz[3]]: (
+            'Республика Казахстан, город Нур-Султан, район Есиль, улица Сарайшык, дом 7,н.п. 24,  почтовый индекс 010000'
         ),
         default:
             "Казахстан, город Алматы, Алмалинский район, улица КАЗЫБЕК БИ, дом 50, почтовый индекс 050000",

@@ -39,6 +39,8 @@ export const minSums = {
     kz: {
         [prefixes.kz[0]]: 2000,
         [prefixes.kz[1]]: 5000,
+        [prefixes.kz[2]]: 5000,
+        [prefixes.kz[3]]: 5000,
     },
 };
 const onSumChange = createEvent()

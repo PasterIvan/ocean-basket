@@ -67,11 +67,13 @@ export const addresses: Country[] = [
                             gps: [43.256069, 76.945169],
                         },
 
-                        // {
-                        //   address: "мкр. Самал-2, 111, ТРЦ Dostyk Plaza, 3-й этаж",
-                        //   number: "+8 (777) 246 6878",
-                        //   gps: [43.23388, 76.957239],
-                        // },
+                        {
+                            url: hosts[4],
+                            prefix: prefixes.kz[2],
+                            address: "мкр. Самал-2, 111, ТРЦ Dostyk Plaza, 3-й этаж",
+                            number: "+7 (777) 246 6878",
+                            gps: [43.23388, 76.957239],
+                        },
                         // {
                         //   address:
                         //     "ул. Розыбакиева 247А, ТРЦ Mega Center, 3-й этаж, Галерея ресторанов",
@@ -93,11 +95,13 @@ export const addresses: Country[] = [
                                 gps: [51.08921, 71.40666],
                             },
 
-                            //     {
-                            //       address: "ул. Сарайшык 7",
-                            //       number: "+8 (777) 888 9221",
-                            //       gps: [51.135321, 71.42623],
-                            //     },
+                            {
+                                url: hosts[5],
+                                prefix: prefixes.kz[3],
+                                address: "ул. Сарайшык 7",
+                                number: "+7 (777) 888 9221",
+                                gps: [51.135321, 71.42623],
+                            },
                             //     {
                             //       address: "MEGA Silk Way, просп. Кабанбай Батыра, 62",
                             //       number: "+8 (700) 777 9697",

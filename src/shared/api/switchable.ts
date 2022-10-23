@@ -26,18 +26,7 @@ window.onChangePrefix = () => {
     flag = true;
 
     console.log("prefix", $hostUrl.getState());
-    //
-    // if (flag) {
-    //     onChangeHostUrl(prefixes.kz[0]);
-    //     flag = false;
-    //
-    //     console.log("prefix", $hostUrl.getState());
-    //     return;
-    // }
-    //
-    // onChangeHostUrl(prefixes.kz[1]);
-    // flag = true;
-    // console.log("prefix", $hostUrl.getState());
+
 };
 
 
