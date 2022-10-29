@@ -85,7 +85,7 @@ export const urlToMerchantLogins = {
     [hosts[0]]: "Ocean_Basket",
     [hosts[1]]: "OceanBasketShu",
     [hosts[2]]: "OceanBasketKZ",
-    [hosts[3]]: "OceanBasket_mega",
+    [hosts[3]]: "ob_megasilkway",
     [hosts[4]]: "OceanBasket_ALA",
     [hosts[5]]: "OceanBasket_NQZ",
 };
@@ -97,7 +97,7 @@ const merchantLogins = {
     },
     kz: {
         [prefixes.kz[0]]: "OceanBasketKZ",
-        [prefixes.kz[1]]: "OceanBasket_mega",
+        [prefixes.kz[1]]: "ob_megasilkway",
         [prefixes.kz[2]]: "OceanBasket_ALA",
         [prefixes.kz[3]]: "OceanBasket_NQZ",
     },
